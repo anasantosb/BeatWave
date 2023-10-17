@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" type="text/css" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" href="logo site.png" type="image/png">
+        <title>Qual é a música?</title>
+    </head>
+    <body style="background-image: url('layered-waves-haikei.png'); background-size: cover; background-repeat: no-repeat; background-attachment: fixed;"> 
+        
+        <div id="login">
+            <form class="card">
+                <div class="card-header">
+                    <video id="background-video" autoplay loop muted>
+                        <source src="video onda.mp4" type="video/mp4">
+                        Seu navegador não suporta o elemento de vídeo.
+                    </video>
+                </div>
+                <div id="placar">
+                    Pontuação: <span id="pontuacao">0</span>
+                </div>
+                <br>
+                <div id="game-container"></div>
+                <button id="play-music" class="hidden custom-button">Play</button>
+                <div class="center-text"></div>
+                <label id="lbl-resposta" for="resposta" class="hidden"></label>
+                <input type="text" id="resposta" class="hidden" placeholder="Digite sua resposta" required="true"></input>
+                <button id="btn-resposta" class="hidden custom-button">Enviar</button>
+                <br>
+                <div class="card-footer">
+                    <a href="#"><input type="button" value="Voltar para página inicial" onclick="confirmExit()" class="submit"></a>
+                </div>
+            </form>
+        </div>
+        <script src="https://sdk.scdn.co/spotify-player.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
