@@ -163,7 +163,8 @@ document.addEventListener("DOMContentLoaded", function() {
     video.addEventListener("mouseleave", function() {
         video.controls = false;
     });
-    
+
+
 });
 
 
@@ -222,3 +223,7 @@ function confirmExit() {
         window.location.href = "index.html";
     }
 }
+
+
+
+
