@@ -57,7 +57,7 @@ function reiniciarJogo() {
 
 window.onSpotifyWebPlaybackSDKReady = () => {
     // Substitua o token abaixo a cada hora, precisa estar logado, através do link https://developer.spotify.com/documentation/web-playback-sdk/tutorials/getting-started
-    const token = "BQCwEW_wjMwYa382op0t24Me_5SszRQIA8JQA5ZECJFBruiZBjocDQ8JDx5VgUEkX4glXjUAcviYm0YFXBZzXh_CMjP42JnSefOqRvZMmlwBzGENmRjzU14TzOhoFMqhdW0KtHGEzCj4HWx7QD6V4QqLtMpRKFTSuUBGhVLqd_rY2Qoqe_U99X0VeC7yrxSCrBv2mANhScrPUzYQ-3TlEXqIII7W";
+    const token = "BQD-2WpWNtEMeoEaeF9_4ANplVcZFEb1Kr7hxcM288bfJOqcSmWHQRIQ9ih9kl72ce1DpqQoldYdfFu_73TCJj0ieKbPPQz0rBw-IQfsdNLnaVGn9XhFKpsgotDUcL9wnD74QbyQ6G_g0jR7W8CLPBlvHIeMeZcawmS-0NMe2XRZtCdeJkRJfmBR6qaHsgO4XzjR_Pi__o8fGnR2Sp0aXytu_7uh";
     player = new Spotify.Player({
         name: "Web Playback SDK Quick Start Player",
         getOAuthToken: (cb) => {
