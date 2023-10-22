@@ -57,7 +57,7 @@ function reiniciarJogo() {
 
 window.onSpotifyWebPlaybackSDKReady = () => {
     // Substitua o token abaixo a cada hora, precisa estar logado, através do link https://developer.spotify.com/documentation/web-playback-sdk/tutorials/getting-started
-    const token = "BQBDRgUydDJvqM-KfEtHoJG441R7O8qYPsjGtgNDy-rLergFqUOxGoDavRUjrdhibrDAheRv3In-cqb_8_JNJ9tO2kO1eS5OgYgsSKuRLeW6YmB3ck9CsNb2XVr2Cj-58DQs_wTWe_ZkAWhGkD5Ho442quxnb36NizeFPlEez27dhOxquv4iyEZi93s8Mu3nS8DNuUwKdjmFVxOI8lh_PGsj0n2c";
+    const token = "BQCwEW_wjMwYa382op0t24Me_5SszRQIA8JQA5ZECJFBruiZBjocDQ8JDx5VgUEkX4glXjUAcviYm0YFXBZzXh_CMjP42JnSefOqRvZMmlwBzGENmRjzU14TzOhoFMqhdW0KtHGEzCj4HWx7QD6V4QqLtMpRKFTSuUBGhVLqd_rY2Qoqe_U99X0VeC7yrxSCrBv2mANhScrPUzYQ-3TlEXqIII7W";
     player = new Spotify.Player({
         name: "Web Playback SDK Quick Start Player",
         getOAuthToken: (cb) => {
@@ -69,7 +69,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
     player.addListener('ready', ({ device_id }) => {
         console.log('Ready with Device ID', device_id);
         const connect_to_device = () => {
-            let album_uri = "spotify:playlist:4JnJLPivMp4972eJkOyp9y";
+            let album_uri = "spotify:playlist:7JLXnCNAsjCUsvQyD8kmK6";
             fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
                 method: "PUT",
                 body: JSON.stringify({
@@ -117,7 +117,7 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             //console.log('contador:'+contador_musicas);
 
             // nesse bloco é onde verifica-se o numero de musicas, exemplo: se 10 musicas, ele finaliza o jogo e insere a pontuação do jogador
-            if(contador_musicas === 10){
+            if(contador_musicas === 6){
                 alert('PARABÉNS, Você finalizou o jogo!!!');
                 var v_pontuacao = JSON.parse(localStorage.getItem('pontos_jogador')) || [];
                 v_pontuacao.push(pontos);
@@ -163,8 +163,7 @@ document.addEventListener("DOMContentLoaded", function() {
     video.addEventListener("mouseleave", function() {
         video.controls = false;
     });
-
-
+    
 });
 
 
@@ -223,7 +222,3 @@ function confirmExit() {
         window.location.href = "index.html";
     }
 }
-
-
-
-
