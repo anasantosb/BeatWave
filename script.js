@@ -35,7 +35,8 @@ let player;
 let trackName;
 let pontos = 0;
 let contador_musicas = 0;
-var erros = 0;
+let erros = 0;
+let connect_to_device;
 
 function atualizarPontuacao() {
     const pontuacaoElement = document.getElementById("pontuacao");
@@ -55,9 +56,17 @@ function reiniciarJogo() {
     window.location.href = "index.html"; // Redireciona para a página de entrada
 }
 
+// function getToken() {
+//     fetch("token.json")
+//       .then((response) => response.json())
+//       .then((data) => {
+//         token = data.token;
+//       });
+//   }
+//   getToken();
+
 window.onSpotifyWebPlaybackSDKReady = () => {
-    // Substitua o token abaixo a cada hora, precisa estar logado, através do link https://developer.spotify.com/documentation/web-playback-sdk/tutorials/getting-started
-    const token = "BQA634xfv9p_2AmUpVOEkjB5m_GQyB09MU35ZCvYwNQ9fS_CU0xUH-VuIaJvSu5MvYUXdXkonMOMuM1gYutXbFwj2DYQMoaRnuH2w3OucNIwfcHxdWC0EY8Hz5cmPWdM1tkyC274Pwe9iCRjy1qQyRaX2oJ9uPYSWAbAEQUbol-8olUynwMb4eTwvfKxrUkRiz5W_SEUycPZLs0yat89kfbvDrrU";
+    token = 'BQAhuc4jojaBlwd-WQtAZckFolXY-Rp9TjRcHWW43FYkm-ZfU5re1uYRk4hnc3TBT4YOBR8js7tOhOs922PjVpOJQuRTr0T8Q8CEwT_Ic56N3DxsOwTQlQ4ZHp4lzegHuRXdrE_UIksj9EbL7q6Ga7LREGjhNI0l_XrY26efgG_192Gf0BVdNOOo_RdBUkjwlfuG7D138j2Z86WgZT5QEGRk97-V'
     player = new Spotify.Player({
         name: "Web Playback SDK Quick Start Player",
         getOAuthToken: (cb) => {
@@ -65,11 +74,24 @@ window.onSpotifyWebPlaybackSDKReady = () => {
         },
         volume: 0.5,
     });
-
+  //um array com os albuns que serão usados no jogo
+  let album_uri = [
+    'spotify:playlist:52zqBFUUiCkDhCwnbOgsiR',
+    'spotify:playlist:7KNmVw9v0nBKzjoEYcxzOh',
+    'spotify:playlist:7JLXnCNAsjCUsvQyD8kmK6'
+  ];
+  //função para escolher um album aleatorio do array
+  let randomAlbum = album_uri[Math.floor(Math.random() * album_uri.length)];
+  album_uri = randomAlbum;
+//console.log(album_uri);
     player.addListener('ready', ({ device_id }) => {
         console.log('Ready with Device ID', device_id);
-        const connect_to_device = () => {
-            let album_uri = "spotify:playlist:7JLXnCNAsjCUsvQyD8kmK6";
+        connect_to_device = () => {
+            //espera o usuario selecionar o album para continuar
+              if (!album_uri) {
+                setTimeout(connect_to_device, 1000);
+                return;
+              }
             fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
                 method: "PUT",
                 body: JSON.stringify({
@@ -86,15 +108,23 @@ window.onSpotifyWebPlaybackSDKReady = () => {
                 }) => {
                     trackName = track_window.current_track.name;
                     trackName = trackName.toLowerCase();
+                    //tira acentos e caracteres especiais
+                    trackName = trackName.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
                     //console.log('Current Track:', trackName);
 
                 });
             });
         }
-        connect_to_device();
     });
+let isConnected;
+    document.getElementById("play-music").addEventListener('click', (e) => {
+        //previne que a pagina seja recarregada zerando a pontuação
+        e.preventDefault();
 
-    document.getElementById("play-music").addEventListener('click', () => {
+        if (!isConnected) {
+              connect_to_device();
+              isConnected = true;
+        }
         if (!player.paused) {
             decrementarPontos();
         }
@@ -106,9 +136,10 @@ window.onSpotifyWebPlaybackSDKReady = () => {
 
     document.getElementById("btn-resposta").addEventListener('click', (event) => {
         event.preventDefault();
-        let respostaElement = document.getElementById("resposta");
-        let resposta = respostaElement.value;
-        resposta = resposta.toLowerCase();
+        let resposta = document.getElementById("resposta").value;
+        resposta.toLowerCase();
+        //tira acentos e caracteres especiais
+        resposta.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
         if (resposta == trackName) {
             alert("Você Acertou, Parabéns!");
             pontos += 10;
@@ -117,26 +148,23 @@ window.onSpotifyWebPlaybackSDKReady = () => {
             //console.log('contador:'+contador_musicas);
 
             // nesse bloco é onde verifica-se o numero de musicas, exemplo: se 10 musicas, ele finaliza o jogo e insere a pontuação do jogador
-            if(contador_musicas === 6){
+            if(contador_musicas === 8){
                 alert('PARABÉNS, Você finalizou o jogo!!!');
                 var v_pontuacao = JSON.parse(localStorage.getItem('pontos_jogador')) || [];
                 v_pontuacao.push(pontos);
                 localStorage.setItem('pontos_jogador', JSON.stringify(v_pontuacao));
                 window.location.href = "index.html";
             }
-            
-            
             // Avance para a próxima música
             player.nextTrack();
             // Reinicie o temporizador para pausar a próxima música após 10 segundos
             setTimeout(() => {
                 player.pause();
             }, 10000);
-            document.getElementById('resposta').value=''; 
-            // Limpar a caixa de respostas usando o formulário
-            document.getElementById("resposta").reset();
+            // Limpar a caixa de resposta
+            document.getElementById('resposta').value='';
         } else {
-            document.getElementById('resposta').value=''; 
+            document.getElementById('resposta').value='';
             alert("Você errou, tente novamente!");
             erros++;
             decrementarPontos();  // Subtrai pontos quando o usuário erra
@@ -164,9 +192,7 @@ document.addEventListener("DOMContentLoaded", function() {
         video.controls = false;
     });
 
-
 });
-
 
 function exibirRanking() {
     // Verifica se está na página do ranking
@@ -202,7 +228,7 @@ function exibirRanking() {
                 jogadorItem.textContent = jogadores[j].apelido + ' - Pontuação: ' + jogadores[j].pontuacao;
                 listaRanking.appendChild(jogadorItem);
             }
-            
+
         }
     }
 }
@@ -223,7 +249,3 @@ function confirmExit() {
         window.location.href = "index.html";
     }
 }
-
-
-
-
